@@ -1,3 +1,5 @@
+import os.path
+
 from boardgamegeek import BGGClient
 import csv
 from PIL import Image, ImageDraw, ImageFont
@@ -8,6 +10,7 @@ from io import BytesIO
 POSTER_SIZE_X = 3508
 POSTER_SIZE_Y = 4961
 
+SRC_PATH = "src/boardgames_ranks.csv"
 OUTPUT_PATH = "target/poster.png"
 
 OUTER_MARGINS = 4
@@ -53,7 +56,7 @@ def write_with_outline(x, y, text, text_color, outline_color, font, align, ancho
 
 
 games = {}
-with open("boardgames_ranks.csv", "r") as f:
+with open("src/boardgames_ranks.csv", "r") as f:
     lines = csv.reader(f)
     header = next(lines)
     for line in lines:
@@ -135,5 +138,7 @@ print(f"{INNER_MARGINS=}, {OUTER_MARGINS=}")
 
 background = Image.new("RGB", poster.size, BACKGROUND_COLOR)
 background.paste(poster, poster.split()[-1])
+if not os.path.exists("target"):
+    os.makedirs("target")
 background.save(OUTPUT_PATH)
 background.show()
